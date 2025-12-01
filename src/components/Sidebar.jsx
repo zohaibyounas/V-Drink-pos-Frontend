@@ -15,6 +15,9 @@ import {
   User,
 } from "lucide-react";
 
+// Import the logo - make sure the path is correct
+import logo from "../assets/logo.png"; // Adjust the path based on your folder structure
+
 export default function Sidebar() {
   const [open, setOpen] = useState(true);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -53,10 +56,10 @@ export default function Sidebar() {
         />
       )}
 
-      {/* Sidebar Container */}
+      {/* Sidebar Container - Now sticky and non-scrolling */}
       <aside
         className={`
-        fixed lg:relative inset-y-0 left-0 z-50
+        fixed lg:sticky lg:top-0 inset-y-0 left-0 z-50
         transform transition-transform duration-300 ease-in-out
         ${isMobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
         flex flex-col h-screen bg-white border-r border-gray-200
@@ -66,24 +69,41 @@ export default function Sidebar() {
         {/* Logo Section */}
         <div className="flex items-center justify-between p-4 border-b border-gray-200">
           {open ? (
-            <div className="flex items-center gap-3">
-              <div
-                className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-cyan-400 
-                flex items-center justify-center text-white font-bold text-lg shadow-md"
-              >
-                V
-              </div>
-              <div>
-                <h1 className="font-bold text-lg">V-Drink</h1>
-                <p className="text-xs text-gray-500">Cash & Tax Manager</p>
+            <div className="flex items-center justify-center w-full">
+              {/* Logo Image - Square for better appearance */}
+              <div className="w-24 h-24 rounded-lg overflow-hidden flex items-center justify-center bg-white">
+                <img
+                  src={logo}
+                  alt="V-Drink Logo"
+                  className="w-full h-full object-contain p-2"
+                  onError={(e) => {
+                    // Fallback if image fails to load
+                    e.target.style.display = "none";
+                    e.target.parentElement.innerHTML = `
+                      <div class="w-16 h-16 rounded-lg bg-gradient-to-br from-purple-500 to-cyan-400 flex items-center justify-center text-white font-bold text-xl">
+                        V
+                      </div>
+                    `;
+                  }}
+                />
               </div>
             </div>
           ) : (
-            <div
-              className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-cyan-400 
-              mx-auto flex items-center justify-center text-white font-bold text-lg shadow-md"
-            >
-              F
+            <div className="w-10 h-10 rounded-lg overflow-hidden mx-auto flex items-center justify-center bg-white">
+              <img
+                src={logo}
+                alt="V-Drink Logo"
+                className="w-full h-full object-contain p-1"
+                onError={(e) => {
+                  // Fallback if image fails to load
+                  e.target.style.display = "none";
+                  e.target.parentElement.innerHTML = `
+                    <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500 to-cyan-400 flex items-center justify-center text-white font-bold">
+                      V
+                    </div>
+                  `;
+                }}
+              />
             </div>
           )}
 
@@ -92,6 +112,7 @@ export default function Sidebar() {
             onClick={() => setOpen(!open)}
             className="hidden lg:flex items-center justify-center w-8 h-8 rounded-lg 
               hover:bg-gray-100 text-gray-600"
+            title={open ? "Collapse sidebar" : "Expand sidebar"}
           >
             {open ? <ChevronLeft size={20} /> : <ChevronRight size={20} />}
           </button>
@@ -100,6 +121,7 @@ export default function Sidebar() {
           <button
             onClick={() => setIsMobileOpen(false)}
             className="lg:hidden w-8 h-8 rounded-lg hover:bg-gray-100 text-gray-600"
+            title="Close menu"
           >
             <X size={20} />
           </button>
@@ -126,8 +148,8 @@ export default function Sidebar() {
           </div>
         )}
 
-        {/* Navigation Menu */}
-        <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
+        {/* Navigation Menu - No overflow now */}
+        <nav className="flex-1 p-4 space-y-1">
           {navItems.map((item) => {
             const Icon = item.icon;
             return open ? (
@@ -136,6 +158,7 @@ export default function Sidebar() {
                 to={item.to}
                 className={linkClass}
                 onClick={() => setIsMobileOpen(false)}
+                title={item.label}
               >
                 <Icon size={20} />
                 <span className="font-medium">{item.label}</span>
@@ -154,8 +177,8 @@ export default function Sidebar() {
           })}
         </nav>
 
-        {/* Bottom Section */}
-        <div className="p-4 border-t border-gray-200 space-y-2">
+        {/* Bottom Section - Always at bottom */}
+        <div className="mt-auto p-4 border-t border-gray-200 space-y-2">
           {open ? (
             <>
               <NavLink
@@ -168,6 +191,7 @@ export default function Sidebar() {
                       : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
                   }`
                 }
+                title="Settings"
               >
                 <Settings size={20} />
                 <span className="font-medium">Settings</span>
@@ -175,6 +199,7 @@ export default function Sidebar() {
               <button
                 className="flex items-center gap-3 w-full px-4 py-3 rounded-lg 
                 text-gray-700 hover:bg-gray-50 hover:text-red-600 transition-all duration-200"
+                title="Logout"
               >
                 <LogOut size={20} />
                 <span className="font-medium">Logout</span>
@@ -213,6 +238,7 @@ export default function Sidebar() {
         onClick={() => setIsMobileOpen(true)}
         className="lg:hidden fixed top-4 left-4 z-30 w-10 h-10 bg-white rounded-lg 
           shadow-md flex items-center justify-center text-gray-700"
+        title="Open menu"
       >
         <Menu size={20} />
       </button>
