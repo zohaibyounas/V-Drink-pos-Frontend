@@ -56,7 +56,7 @@ export default function Sidebar() {
         />
       )}
 
-      {/* Sidebar Container - Now sticky and non-scrolling */}
+      {/* Sidebar Container - Sticky with scrolling content */}
       <aside
         className={`
         fixed lg:sticky lg:top-0 inset-y-0 left-0 z-50
@@ -66,11 +66,11 @@ export default function Sidebar() {
         ${open ? "w-64" : "w-20"}
       `}
       >
-        {/* Logo Section */}
+        {/* Logo Section - Fixed at top */}
         <div className="flex items-center justify-between p-4 border-b border-gray-200">
           {open ? (
             <div className="flex items-center justify-center w-full">
-              {/* Logo Image - Square for better appearance */}
+              {/* Logo Image */}
               <div className="w-24 h-24 rounded-lg overflow-hidden flex items-center justify-center bg-white">
                 <img
                   src={logo}
@@ -80,7 +80,7 @@ export default function Sidebar() {
                     // Fallback if image fails to load
                     e.target.style.display = "none";
                     e.target.parentElement.innerHTML = `
-                      <div class="w-16 h-16 rounded-lg bg-gradient-to-br from-purple-500 to-cyan-400 flex items-center justify-center text-white font-bold text-xl">
+                      <div class="w-24 h-24 rounded-lg bg-gradient-to-br from-purple-500 to-cyan-400 flex items-center justify-center text-white font-bold text-xl">
                         V
                       </div>
                     `;
@@ -127,7 +127,7 @@ export default function Sidebar() {
           </button>
         </div>
 
-        {/* User Profile Section */}
+        {/* User Profile Section - Fixed below logo */}
         {open ? (
           <div className="p-4 border-b border-gray-200">
             <div className="flex items-center gap-3">
@@ -148,37 +148,39 @@ export default function Sidebar() {
           </div>
         )}
 
-        {/* Navigation Menu - No overflow now */}
-        <nav className="flex-1 p-4 space-y-1">
-          {navItems.map((item) => {
-            const Icon = item.icon;
-            return open ? (
-              <NavLink
-                key={item.to}
-                to={item.to}
-                className={linkClass}
-                onClick={() => setIsMobileOpen(false)}
-                title={item.label}
-              >
-                <Icon size={20} />
-                <span className="font-medium">{item.label}</span>
-              </NavLink>
-            ) : (
-              <NavLink
-                key={item.to}
-                to={item.to}
-                className={collapsedLinkClass}
-                title={item.label}
-                onClick={() => setIsMobileOpen(false)}
-              >
-                <Icon size={20} />
-              </NavLink>
-            );
-          })}
-        </nav>
+        {/* Scrollable Navigation Area */}
+        <div className="flex-1 overflow-y-auto">
+          <nav className="p-4 space-y-1">
+            {navItems.map((item) => {
+              const Icon = item.icon;
+              return open ? (
+                <NavLink
+                  key={item.to}
+                  to={item.to}
+                  className={linkClass}
+                  onClick={() => setIsMobileOpen(false)}
+                  title={item.label}
+                >
+                  <Icon size={20} />
+                  <span className="font-medium">{item.label}</span>
+                </NavLink>
+              ) : (
+                <NavLink
+                  key={item.to}
+                  to={item.to}
+                  className={collapsedLinkClass}
+                  title={item.label}
+                  onClick={() => setIsMobileOpen(false)}
+                >
+                  <Icon size={20} />
+                </NavLink>
+              );
+            })}
+          </nav>
+        </div>
 
-        {/* Bottom Section - Always at bottom */}
-        <div className="mt-auto p-4 border-t border-gray-200 space-y-2">
+        {/* Bottom Section - Fixed at bottom */}
+        <div className="p-4 border-t border-gray-200 space-y-2">
           {open ? (
             <>
               <NavLink
